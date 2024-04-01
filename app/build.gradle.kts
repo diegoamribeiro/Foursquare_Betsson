@@ -76,13 +76,15 @@ android {
             dimension = "product"
             applicationIdSuffix = ".coffee"
             manifestPlaceholders["appName"] = "CoffeeApp"
-            buildConfigField("int", "CATEGORY_ID", "13035")
+            buildConfigField("String", "CATEGORY_ID", "\"13035\"")
+            buildConfigField("int", "RADIUS", "1000")
         }
         create("cocktail") {
             dimension = "product"
             applicationIdSuffix = ".cocktail"
             manifestPlaceholders["appName"] = "CocktailApp"
-            buildConfigField("int", "CATEGORY_ID", "13009")
+            buildConfigField("String", "CATEGORY_ID", "\"13009\"")
+            buildConfigField("int", "RADIUS", "3000")
         }
         create("client") {
             dimension = "side"

@@ -11,7 +11,8 @@ class PlacesRemoteDataSource @Inject constructor (private val api: PlacesApi) {
         radius: Int,
         minPrice: Int?,
         maxPrice: Int?,
-        openNow: Boolean?
-    ) = api.searchNearbyPlaces(location, categories, radius, minPrice, maxPrice, openNow).body()
+        openNow: Boolean?,
+        fields: String
+    ) = api.searchNearbyPlaces(location, categories, radius, minPrice, maxPrice, openNow, fields).body()
         ?: throw Exception("Failed to load data")
 }

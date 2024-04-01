@@ -7,12 +7,19 @@ import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.annotation.IntDef
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.dmribeiro87.foursquarebetsson.R
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 object Utils {
+
+    @IntDef(View.GONE, View.INVISIBLE)
+    annotation class HideTypeDef
 
     fun hasInternetConnection(@ApplicationContext appContext: Context): Boolean {
 
@@ -30,10 +37,16 @@ object Utils {
         }
     }
 
-    fun ImageView.loadImage(imageUrl: String, itemView: View = this) {
-        Glide.with(itemView)
+    fun ImageView.loadImage(imageUrl: String, context: Context) {
+        Glide.with(context)
             .load(imageUrl)
+            .placeholder(R.drawable.ic_placeholder)
+            .error(R.drawable.ic_close_online)
             .transition(DrawableTransitionOptions.withCrossFade())
+            .transform(CenterCrop(), RoundedCorners(16))
             .into(this)
     }
+
+    fun View.show() = run { this.visibility = View.VISIBLE }
+    fun View.hide(@HideTypeDef hideType: Int = View.GONE) = run { this.visibility = hideType }
 }

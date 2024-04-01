@@ -7,4 +7,22 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="light_gray">#D3D3D3</color>
+    <color name="light_translucent">#65000000</color>
+
+    <color name="switch_track_on">#4CAF50</color>
+    <color name="switch_thumb_on">#FFFFFF</color>
+
+    <color name="switch_track_off">#BDBDBD</color>
+    <color name="switch_thumb_off">#FFFFFF</color>
+
+    <color name="switch_green">@color/success</color>
+    <color name="switch_disable">@color/disabled</color>
+    <color name="disabled">#B7B7B7</color>
+    <color name="switch_border_disable">@color/disabled</color>
+    <color name="switch_thumb_disable">@color/white</color>
+    <color name="switch_thumb_enabled">@color/white</color>
+
+    <color name="success">#0DA051</color>
+    <color name="success_light">#8AFF95</color>
 </resources>

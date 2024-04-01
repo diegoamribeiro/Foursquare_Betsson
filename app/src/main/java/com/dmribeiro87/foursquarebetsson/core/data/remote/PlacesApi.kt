@@ -14,7 +14,8 @@ interface PlacesApi {
         @Query("radius") radius: Int,
         @Query("min_price") minPrice: Int?,
         @Query("max_price") maxPrice: Int?,
-        @Query("open_now") openNow: Boolean?
+        @Query("open_now") openNow: Boolean?,
+        @Query("fields") fields: String?
     ): Response<PlacesResponse>
 
 }

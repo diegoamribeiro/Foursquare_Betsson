@@ -9,13 +9,13 @@
     <fragment
         android:id="@+id/nav_places"
         android:name="com.dmribeiro87.foursquarebetsson.placesFeature.presentation.PlacesFragment"
-        android:label="fragment_places"
+        android:label="@string/title_foursquare"
         tools:layout="@layout/fragment_places" />
 
     <fragment
         android:id="@+id/nav_details"
         android:name="com.dmribeiro87.foursquarebetsson.ui.details.DetailsFragment"
-        android:label="fragment_details"
+        android:label="@string/title_foursquare"
         tools:layout="@layout/fragment_details" >
         <action
             android:id="@+id/action_nav_details_to_nav_places"
