@@ -7,7 +7,7 @@ sealed class Resource<out T>(
 ) {
 
     class Loading<T> : Resource<T>()
-    data class Error<T>(override val message: String?, override val data: T?) :
+    data class Error<T>(override val message: String?, override val data: T? = null) :
         Resource<T>(data, message)
 
     data class Success<T>(override val data: T?) : Resource<T>(data)

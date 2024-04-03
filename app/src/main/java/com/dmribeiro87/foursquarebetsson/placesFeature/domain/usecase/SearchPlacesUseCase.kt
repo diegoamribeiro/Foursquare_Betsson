@@ -8,12 +8,13 @@ import javax.inject.Inject
 
 class SearchPlacesUseCase @Inject constructor(private val repository: PlacesRepository) {
     suspend operator fun invoke(
+        location: String,
         minPrice: Int?,
         maxPrice: Int?,
         openNow: Boolean?
     ): Resource<List<Place>> {
         Log.d("SearchPlacesUseCase", "Invoke: isOpen = $openNow")
 
-        return repository.searchNearbyPlaces(minPrice, maxPrice, openNow)
+        return repository.searchNearbyPlaces(location, minPrice, maxPrice, openNow)
     }
 }

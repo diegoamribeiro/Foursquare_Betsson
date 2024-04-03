@@ -3,6 +3,7 @@ package com.dmribeiro87.foursquarebetsson.ui
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -19,14 +20,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //enableEdgeToEdge()
+        enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        window.statusBarColor = ContextCompat.getColor(this, R.color.card_color)
 
         val homeContainerView = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
         navController = homeContainerView.navController
         setupActionBarWithNavController(navController)
-
     }
 
     override fun onSupportNavigateUp(): Boolean {

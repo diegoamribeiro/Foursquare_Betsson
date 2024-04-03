@@ -1,10 +1,252 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.details.DetailsFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_container"
+    tools:context=".detailsFeature.presentation.DetailsFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/ns_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="?android:attr/actionBarSize">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_header"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:background="@color/toolbar_color"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sora_bold"
+                    android:background="@drawable/bg_translucent_right"
+                    tools:text="$$$"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/iv_header"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginTop="16dp"
+                    android:scaleType="centerCrop"
+                    tools:src="@tools:sample/avatars"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/iv_header"
+                    android:orientation="horizontal"
+                    android:layout_marginVertical="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/image_item"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:layout_constraintTop_toBottomOf="@id/cl_header">
+
+                <TextView
+                    android:id="@+id/tv_place_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sora_bold"
+                    tools:text="Place Name"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/tv_rating"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sora_bold"
+                    tools:text="4.4"
+                    android:textSize="20sp"
+                    app:drawableStartCompat="@drawable/ic_star"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_place_name"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_total_ratins"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sora_regular"
+                    android:textColor="@color/light_gray"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_rating"
+                    tools:text="230" />
+
+                <TextView
+                    android:id="@+id/tv_place_type"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/sora_regular"
+                    android:textColor="@color/darker_gray"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_total_ratins"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_place_name"
+                    tools:text="Place Name" />
+
+                <TextView
+                    android:id="@+id/label_open_until"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sora_regular"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/availability"
+                    android:textSize="12sp"
+                    app:drawableTint="@color/medium_gray"
+                    app:drawableStartCompat="@drawable/ic_time"
+                    android:drawablePadding="4dp"
+                    android:textColor="@color/medium_gray"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_place_type"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_open_until"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:fontFamily="@font/sora_regular"
+                    android:textColor="@color/medium_gray"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/label_open_until"
+                    app:layout_constraintTop_toTopOf="@+id/label_open_until"
+                    tools:text="00:00" />
+
+                <TextView
+                    android:id="@+id/label_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="4dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/sora_regular"
+                    android:text="@string/address"
+                    android:textColor="@color/medium_gray"
+                    app:drawableTint="@color/medium_gray"
+                    android:textSize="12sp"
+                    app:drawableStartCompat="@drawable/ic_location"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_open_until" />
+
+                <TextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:fontFamily="@font/sora_regular"
+                    android:textColor="@color/medium_gray"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/label_address"
+                    app:layout_constraintTop_toTopOf="@id/label_address"
+                    tools:text="Address" />
+
+                <TextView
+                    android:id="@+id/label_tel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sora_regular"
+                    android:text="@string/phone"
+                    android:layout_marginTop="4dp"
+                    android:textSize="12sp"
+                    app:drawableStartCompat="@drawable/ic_call"
+                    app:drawableTint="@color/medium_gray"
+                    android:drawablePadding="4dp"
+                    android:textColor="@color/medium_gray"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_address"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_tel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:fontFamily="@font/sora_regular"
+                    android:textColor="@color/medium_gray"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/label_tel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/label_tel"
+                    app:layout_constraintTop_toTopOf="@+id/label_tel"
+                    tools:text="+55 75 5000000" />
+
+                <TextView
+                    android:id="@+id/tv_tips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sora_bold"
+                    android:text="Tips"
+                    android:layout_marginTop="8dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_tel"
+                    />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_tips"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/tv_tips"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:orientation="vertical"
+                    android:layout_marginVertical="16dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
-</FrameLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

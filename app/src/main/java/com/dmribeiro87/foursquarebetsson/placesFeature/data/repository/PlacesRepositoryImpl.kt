@@ -3,6 +3,7 @@ package com.dmribeiro87.foursquarebetsson.placesFeature.data.repository
 import android.content.Context
 import com.dmribeiro87.foursquarebetsson.BuildConfig
 import com.dmribeiro87.foursquarebetsson.core.data.remote.model.PhotoResponse
+import com.dmribeiro87.foursquarebetsson.core.data.remote.model.Result
 import com.dmribeiro87.foursquarebetsson.core.util.Constants.CATEGORIES
 import com.dmribeiro87.foursquarebetsson.core.util.Constants.DISTANCE
 import com.dmribeiro87.foursquarebetsson.core.util.Constants.FSQ_ID
@@ -32,43 +33,50 @@ class PlacesRepositoryImpl @Inject constructor(
     private val radius = BuildConfig.RADIUS
 
 
-    override suspend fun searchNearbyPlaces(minPrice: Int?, maxPrice: Int?, openNow: Boolean?): Resource<List<Place>> {
+    override suspend fun searchNearbyPlaces(
+        location: String,
+        minPrice: Int?,
+        maxPrice: Int?,
+        openNow: Boolean?
+    ): Resource<List<Place>> {
         if (!Utils.hasInternetConnection(context)) {
             return Resource.Error(message = "No internet connection", data = null)
         }
-        return try {
 
+        return try {
             val response = placesRemoteDataSource.searchNearbyPlaces(
-                "-12.955354,-38.453281",
+                location,
                 categoryId,
                 radius,
                 minPrice,
                 maxPrice,
                 openNow,
-                fieldsString)
-            val placesList = response.results.map { placeResponse ->
+                fieldsString
+            )
 
-                val matchingCategory = placeResponse.categories.firstOrNull { it.id.toString() == categoryId }
-                val iconUrl = if (matchingCategory != null) {
-                    "${matchingCategory.icon.prefix}$ICON_SIZE${matchingCategory.icon.suffix.trim()}"
-                } else {
-                    placeResponse.categories[0].toString()
+            if (response.isSuccessful && response.body() != null) {
+                val placesList = response.body()!!.results.map { result: Result ->
+                    val iconUrl = result.categories.firstOrNull { it.id.toString() == categoryId }?.icon?.let {
+                        "${it.prefix}$ICON_SIZE${it.suffix.trim()}"
+                    } ?: ""
+
+                    Place(
+                        id = result.fsqId,
+                        name = result.name,
+                        categories = result.categories.map { it.name },
+                        distance = result.distance,
+                        icon = iconUrl,
+                        rating = result.rating ?: 0.0,
+                        price = result.price ?: 1,
+                        photos = result.photos?.map { it.toPhoto() } ?: emptyList()
+                    )
                 }
-
-                Place(
-                    id = placeResponse.fsqId,
-                    name = placeResponse.name,
-                    categories = placeResponse.categories.map { it.name },
-                    distance = placeResponse.distance,
-                    icon = iconUrl,
-                    rating = placeResponse.rating ?: 0.0,
-                    price = placeResponse.price ?: 1,
-                    photos = placeResponse.photos?.map { it.toPhoto() } ?: emptyList()
-                )
+                Resource.Success(data = placesList)
+            } else {
+                Resource.Error(message = response.errorBody()?.string() ?: "Unknown error")
             }
-            Resource.Success(data = placesList)
         } catch (e: Exception) {
-            Resource.Error(message = e.message, data = null)
+            Resource.Error(message = e.message ?: "Unknown error occurred")
         }
     }
 
@@ -81,5 +89,6 @@ class PlacesRepositoryImpl @Inject constructor(
         suffix = this?.suffix ?: "",
         width = this?.width ?: 0
     )
+
 
 }

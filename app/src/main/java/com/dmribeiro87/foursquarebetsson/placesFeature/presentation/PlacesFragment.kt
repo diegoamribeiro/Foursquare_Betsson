@@ -1,5 +1,7 @@
 package com.dmribeiro87.foursquarebetsson.placesFeature.presentation
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -7,7 +9,6 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +16,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dmribeiro87.foursquarebetsson.R
 import com.dmribeiro87.foursquarebetsson.core.util.Resource
@@ -26,6 +29,7 @@ import com.dmribeiro87.foursquarebetsson.core.util.Utils.hide
 import com.dmribeiro87.foursquarebetsson.core.util.Utils.show
 import com.dmribeiro87.foursquarebetsson.core.util.viewBinding
 import com.dmribeiro87.foursquarebetsson.databinding.FragmentPlacesBinding
+import com.dmribeiro87.foursquarebetsson.placesFeature.presentation.adapters.PlacesAdapter
 import com.dmribeiro87.foursquarebetsson.placesFeature.presentation.viewModel.PlacesViewModel
 import com.dmribeiro87.foursquarebetsson.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,6 +43,15 @@ class PlacesFragment : Fragment() {
     private lateinit var adapter: PlacesAdapter
     private var isOpen = false
     private var selectedItem = ""
+
+    private val requestLocationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                viewModel.getCurrentLocationAndSearchPlaces()
+            } else {
+                handlePermissionDenied()
+            }
+        }
 
 
     override fun onCreateView(
@@ -61,8 +74,11 @@ class PlacesFragment : Fragment() {
         setAdapter()
         addObserver()
         setListener()
-
-        viewModel.searchPlaces()
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        } else {
+            viewModel.getCurrentLocationAndSearchPlaces()
+        }
     }
 
     private fun addObserver() {
@@ -75,13 +91,12 @@ class PlacesFragment : Fragment() {
                 is Resource.Success -> {
                     binding.pbLoading.hide()
                     binding.rvMain.show()
-                    Log.d("***Fragment", resource.data.toString())
                     resource.data?.let { adapter.setData(it) }
                 }
                 is Resource.Error -> {
                     binding.pbLoading.hide()
                     binding.rvMain.hide()
-                    Toast.makeText(requireContext(), "Erro", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -93,10 +108,19 @@ class PlacesFragment : Fragment() {
         }
     }
 
+    private fun navigateToDetails(id: String) {
+        val action = PlacesFragmentDirections.actionNavPlacesToNavDetails(id)
+        NavHostFragment.findNavController(this).navigate(action)
+    }
+
     private fun setAdapter() {
         adapter = PlacesAdapter()
         binding.rvMain.layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
         binding.rvMain.adapter = adapter
+
+        adapter.setAction {  id ->
+            navigateToDetails(id)
+        }
     }
 
     private fun setupSpinner() {
@@ -107,9 +131,7 @@ class PlacesFragment : Fragment() {
                 selectedItem = parent?.getItemAtPosition(position) as String
                 viewModel.updateFilters(selectedItem, isOpen)
             }
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // DO Nothing
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
         val items = resources.getStringArray(R.array.spinner_items)
@@ -135,5 +157,9 @@ class PlacesFragment : Fragment() {
             }
         }
         spinner.adapter = spinnerAdapter
+    }
+
+    private fun handlePermissionDenied() {
+        Toast.makeText(context, "Permission required", Toast.LENGTH_LONG).show()
     }
 }

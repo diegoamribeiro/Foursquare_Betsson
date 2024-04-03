@@ -1,10 +1,9 @@
 package com.dmribeiro87.foursquarebetsson.placesFeature.data.datasource
 
-import com.dmribeiro87.foursquarebetsson.core.data.remote.PlacesApi
-import javax.inject.Inject
+import com.dmribeiro87.foursquarebetsson.core.data.remote.model.PlacesResponse
+import retrofit2.Response
 
-class PlacesRemoteDataSource @Inject constructor (private val api: PlacesApi) {
-
+interface PlacesRemoteDataSource {
     suspend fun searchNearbyPlaces(
         location: String,
         categories: String?,
@@ -13,6 +12,5 @@ class PlacesRemoteDataSource @Inject constructor (private val api: PlacesApi) {
         maxPrice: Int?,
         openNow: Boolean?,
         fields: String
-    ) = api.searchNearbyPlaces(location, categories, radius, minPrice, maxPrice, openNow, fields).body()
-        ?: throw Exception("Failed to load data")
+    ): Response<PlacesResponse>
 }

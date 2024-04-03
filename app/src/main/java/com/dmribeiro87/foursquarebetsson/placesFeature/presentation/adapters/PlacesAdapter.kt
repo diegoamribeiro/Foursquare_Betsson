@@ -1,4 +1,4 @@
-package com.dmribeiro87.foursquarebetsson.placesFeature.presentation
+package com.dmribeiro87.foursquarebetsson.placesFeature.presentation.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,16 +9,19 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.dmribeiro87.foursquarebetsson.R
 import com.dmribeiro87.foursquarebetsson.core.util.DiffUtilGeneric
-import com.dmribeiro87.foursquarebetsson.core.util.Utils.loadImage
+import com.dmribeiro87.foursquarebetsson.core.util.Utils.loadImageRounded
 import com.dmribeiro87.foursquarebetsson.databinding.PlaceItemBinding
 import com.dmribeiro87.foursquarebetsson.placesFeature.domain.model.Place
 
 class PlacesAdapter : RecyclerView.Adapter<PlacesAdapter.PlacesViewHolder>() {
 
     private var placesList = emptyList<Place>()
+
+    private var action: ((String) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlacesViewHolder {
         val binding = PlaceItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PlacesViewHolder(binding)
+        return PlacesViewHolder(binding, action)
     }
 
     override fun getItemCount() = placesList.size
@@ -34,7 +37,11 @@ class PlacesAdapter : RecyclerView.Adapter<PlacesAdapter.PlacesViewHolder>() {
         listResult.dispatchUpdatesTo(this)
     }
 
-    inner class PlacesViewHolder(private val binding: PlaceItemBinding) : ViewHolder(binding.root) {
+    fun setAction(action: (String) -> Unit){
+        this.action = action
+    }
+
+    inner class PlacesViewHolder(private val binding: PlaceItemBinding, private val action: ((String) -> Unit)?) : ViewHolder(binding.root) {
         fun bind(place: Place, context: Context) {
             val distanceInKilometers = place.distance / 1000.0
             val currencySign = "$"
@@ -48,9 +55,11 @@ class PlacesAdapter : RecyclerView.Adapter<PlacesAdapter.PlacesViewHolder>() {
             val photoUrl = if (place.photos?.isNotEmpty() == true) {
                 place.photos[0].prefix + "300" + place.photos[0].suffix
             } else {
-                "" // Forneça uma URL de imagem padrão ou deixe em branco
+                ""
             }
-            binding.ivMain.loadImage(photoUrl, context)
+            binding.ivMain.loadImageRounded(photoUrl, context, 16)
+
+            binding.root.setOnClickListener { action?.invoke(place.id) }
         }
     }
 

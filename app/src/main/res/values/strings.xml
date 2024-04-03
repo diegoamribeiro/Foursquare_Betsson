@@ -4,6 +4,9 @@
     <string name="label_open_stores">Open Stores</string>
     <string name="label_price">Price</string>
     <string name="label_km">%d KM</string>
+    <string name="availability">Availability: </string>
+    <string name="address">Address: </string>
+    <string name="phone">Phone: </string>
 
     <string-array name="spinner_items">
         <item>$</item>
