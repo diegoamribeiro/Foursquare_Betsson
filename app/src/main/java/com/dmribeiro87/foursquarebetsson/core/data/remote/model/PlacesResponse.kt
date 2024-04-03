@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PlacesResponse(
     @SerializedName("context")
-    val context: Context,
+    val context: Context? = null,
     @SerializedName("results")
     val results: List<Result>
 )

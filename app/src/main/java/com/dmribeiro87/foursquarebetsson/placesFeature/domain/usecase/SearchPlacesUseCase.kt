@@ -13,8 +13,6 @@ class SearchPlacesUseCase @Inject constructor(private val repository: PlacesRepo
         maxPrice: Int?,
         openNow: Boolean?
     ): Resource<List<Place>> {
-        Log.d("SearchPlacesUseCase", "Invoke: isOpen = $openNow")
-
         return repository.searchNearbyPlaces(location, minPrice, maxPrice, openNow)
     }
 }

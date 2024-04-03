@@ -23,8 +23,7 @@ import javax.inject.Inject
 
 
 class PlacesRepositoryImpl @Inject constructor(
-    private val placesRemoteDataSource: PlacesRemoteDataSource,
-    private val context: Context
+    private val placesRemoteDataSource: PlacesRemoteDataSource
 ) : PlacesRepository {
 
     private val categoryId = BuildConfig.CATEGORY_ID
@@ -39,9 +38,6 @@ class PlacesRepositoryImpl @Inject constructor(
         maxPrice: Int?,
         openNow: Boolean?
     ): Resource<List<Place>> {
-        if (!Utils.hasInternetConnection(context)) {
-            return Resource.Error(message = "No internet connection", data = null)
-        }
 
         return try {
             val response = placesRemoteDataSource.searchNearbyPlaces(

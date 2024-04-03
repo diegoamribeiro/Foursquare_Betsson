@@ -134,7 +134,9 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.play.services.location)
+    //Tests
     testImplementation(libs.junit)
+    testImplementation (libs.mockk)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -142,6 +144,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation (libs.kotlinx.coroutines.play.services)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation (libs.mockito.inline)
+    testImplementation ("androidx.arch.core:core-testing:2.1.0")
+
+
 
     // Retrofit
     implementation (libs.retrofit)

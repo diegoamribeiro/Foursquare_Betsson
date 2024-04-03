@@ -35,8 +35,8 @@ object PlacesFeatureModule {
 
     @Provides
     @Singleton
-    fun providePlacesRepository(remoteDataSource: PlacesRemoteDataSource, @ApplicationContext context: Context): PlacesRepository {
-        return PlacesRepositoryImpl(remoteDataSource, context)
+    fun providePlacesRepository(remoteDataSource: PlacesRemoteDataSource): PlacesRepository {
+        return PlacesRepositoryImpl(remoteDataSource)
     }
 
     @Provides
