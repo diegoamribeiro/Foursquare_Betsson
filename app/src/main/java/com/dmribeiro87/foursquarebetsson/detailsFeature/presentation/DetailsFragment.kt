@@ -1,18 +1,23 @@
 package com.dmribeiro87.foursquarebetsson.detailsFeature.presentation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dmribeiro87.foursquarebetsson.R
 import com.dmribeiro87.foursquarebetsson.core.util.Resource
 import com.dmribeiro87.foursquarebetsson.core.util.Utils.loadImage
-import com.dmribeiro87.foursquarebetsson.core.util.Utils.loadImageRounded
 import com.dmribeiro87.foursquarebetsson.core.util.viewBinding
 import com.dmribeiro87.foursquarebetsson.databinding.FragmentDetailsBinding
 import com.dmribeiro87.foursquarebetsson.detailsFeature.domain.model.PlaceDetails
@@ -30,6 +35,9 @@ class DetailsFragment : Fragment() {
     private val viewModel: DetailsViewModel by viewModels()
     private lateinit var adapter: ImagesAdapter
     private lateinit var tipAdapter: TipAdapter
+    private lateinit var menuItem: MenuItem
+    private var isFavorite = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +48,7 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         setAdapter()
         setTipAdapter()
         viewModel.loadPlaceDetails(args.fsqId)
@@ -111,8 +120,32 @@ class DetailsFragment : Fragment() {
         )
 
         binding.rvTips.addItemDecoration(dividerItemDecoration)
-
     }
 
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.details_fragment_menu, menu)
+        menuItem = menu.findItem(R.id.save_to_favorites)
+        updateFavoriteIcon()
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.save_to_favorites) {
+            isFavorite = !isFavorite
+            updateFavoriteIcon()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun updateFavoriteIcon() {
+        val color = if (isFavorite) R.color.vermilion else R.color.white
+        changeMenuItemColor(menuItem, color)
+    }
+
+    private fun changeMenuItemColor(item: MenuItem, @ColorRes colorRes: Int) {
+        val color = ContextCompat.getColor(requireContext(), colorRes)
+        item.icon?.setTint(color)
+    }
 }

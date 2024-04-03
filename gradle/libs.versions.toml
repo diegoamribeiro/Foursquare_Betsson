@@ -1,5 +1,5 @@
 [versions]
-agp = "8.3.0-rc02"
+agp = "8.3.0"
 converterGson = "2.9.0"
 glide = "4.15.1"
 hiltAndroidVersion = "2.50"

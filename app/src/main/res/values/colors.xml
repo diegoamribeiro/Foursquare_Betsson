@@ -11,6 +11,7 @@
     <color name="darker_gray">#7E7D7D</color>
     <color name="medium_gray">#A8A8A8</color>
     <color name="light_translucent">#65000000</color>
+    <color name="vermilion">#FF2626</color>
 
     <color name="switch_track_on">#4CAF50</color>
     <color name="switch_thumb_on">#FFFFFF</color>
